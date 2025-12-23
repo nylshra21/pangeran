@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Birthday Card</title>
+
+    <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: url('wp harry potter.jpg') no-repeat center center / cover;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card {
+        background: rgba(255, 211, 184, 0.85);
+        padding: 30px;
+        border-radius: 18px;
+        width: 360px;
+        text-align: center;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        transform: scale(0.9);
+        transition: all 0.6s ease;
+        pointer-events: none;
+        position: absolute;
+    }
+
+    .card.active {
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: auto;
+    }
+
+    button {
+        margin: 12px 6px;
+        padding: 10px 22px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        background: #794215;
+        color: white;
+        font-size: 14px;
+    }
+
+    button:hover {
+        background: #4f2404;
+    }
+
+    img.foto {
+        width: 220px;
+        border-radius: 15px;
+        margin-top: 15px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .decor {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    /* BALON GAMBAR */
+    .balloon {
+        position: absolute;
+        bottom: -100px;
+        width: 60px;
+        animation: floatUp linear forwards;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    @keyframes floatUp {
+        from {
+            transform: translateY(0);
+        }
+        to {
+            transform: translateY(-120vh);
+        }
+    }
+    </style>
+</head>
+
+<body>
+
+<audio id="music" loop>
+    <source src="back sound.mp3" type="audio/mpeg">
+</audio>
+
+<!-- HALAMAN 1 -->
+<div class="card active" id="step1">
+    <p><strong>Apakah benar ini dengan Kak Idil?</strong></p>
+    <button onclick="iya()">Iya</button>
+    <button onclick="tidak()">Tidak</button>
+</div>
+
+<!-- HALAMAN 2 -->
+<div class="card" id="step2">
+    <h2>🎉Happy late Birthday Kakk🎉</h2>
+    <p>
+        Semoga di usia yang sekarang ini, semua doa dan harapan Kak Idil yang selama ini masih disimpan pelan-pelan bisa satu per satu terwujud.
+        Semoga setiap langkahnya selalu dimudahkan, rezekinya makin lancar dari berbagai arah, dan hal-hal baik terus datang tanpa harus dikejar jauh-jauh.
+        Semoga apa pun yang sedang diusahakan saat ini membuahkan hasil yang bikin lega dan bangga.
+
+        Tetap jadi pribadi yang asik, hangat, dan menyenangkan seperti sekarang.
+        Jangan lupa jaga kesehatan juga ya, mulai dari istirahat yang cukup, kurangin begadang yang nggak perlu, jangan kopi terus tiap hari, dan jangan males makan.
+        Ingat, semua rencana besar butuh badan yang sehat biar bisa dijalani dengan maksimal.
+        Semoga tahun ini membawa lebih banyak tawa, cerita seru, dan momen bahagia yang layak dikenang.
+    </p>
+    <button onclick="lanjut()">Lanjutkan</button>
+</div>
+
+<!-- HALAMAN 3 -->
+<div class="card" id="step3">
+    <div class="decor">🎉🫣cie nambah tua🫣🎉</div>
+    <img src="kak idil.jpg" alt="Foto Kak Idil" class="foto">
+    <div class="decor">🎩🎂🎩</div>
+
+    <button onclick="kembali()">Kembali</button>
+</div>
+
+
+<script>
+const music = document.getElementById("music");
+let balloonInterval = null;
+
+function fadeInMusic() {
+    music.volume = 0;
+    music.play();
+
+    let volume = 0;
+    const fade = setInterval(() => {
+        if (volume < 1) {
+            volume += 0.05;
+            music.volume = volume;
+        } else {
+            clearInterval(fade);
+        }
+    }, 200);
+}
+
+function iya() {
+    switchCard("step1", "step2");
+    fadeInMusic();
+    startBalloons();
+}
+
+function tidak() {
+    alert("Maaf, salah orang hehehe");
+}
+
+function lanjut() {
+    switchCard("step2", "step3");
+}
+
+function switchCard(hideId, showId) {
+    document.getElementById(hideId).classList.remove("active");
+    document.getElementById(showId).classList.add("active");
+}
+
+function startBalloons() {
+    if (balloonInterval) return;
+
+    balloonInterval = setInterval(() => {
+        const balloon = document.createElement("img");
+        balloon.src = "stiker.jpg";
+        balloon.className = "balloon";
+        balloon.style.left = Math.random() * 100 + "vw";
+        balloon.style.animationDuration = (6 + Math.random() * 4) + "s";
+
+        document.body.appendChild(balloon);
+
+        setTimeout(() => {
+            balloon.remove();
+        }, 12000);
+    }, 500);
+}
+
+function kembali() {
+    switchCard("step3", "step1");
+    music.pause();
+    music.currentTime = 0;
+}
+</script>
+
+</body>
+</html>
